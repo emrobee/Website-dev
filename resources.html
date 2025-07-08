@@ -37,6 +37,9 @@ h1, h2, h3, h4 {
 }
 </style>
 </head>
+    
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>  
+    
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #512888;">
   <div class="container">
@@ -53,8 +56,17 @@ h1, h2, h3, h4 {
       </ul>
     </div>
   </div>
+
+  <form class="d-flex ms-3">
+    <input id="searchBox" class="form-control me-2" type="search" placeholder="Search this site…" aria-label="Search">
+  </form>
+    
 </nav>
 
+<div class="container my-3">
+  <ul id="searchResults"></ul>
+</div>
+    
 <div class="container-fluid p-0">
   <img src="Soghum-Field.jpg" alt="Sorghum Field" class="img-fluid w-100">
 </div>
@@ -77,5 +89,36 @@ h1, h2, h3, h4 {
   &copy; 2025 XXXX. All Rights Reserved.
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const pages = [
+  { title: "Home", url: "index.html", content: "Welcome to the Sorghum Page. Information and resources about sorghum in Central Kansas…" },
+  { title: "About", url: "about.html", content: "About Sorghum and its importance in Central Kansas agriculture…" },
+  { title: "Resources", url: "resources.html", content: "Guides, research papers, and links about sorghum production…" },
+  { title: "Contact", url: "contact.html", content: "Contact us at info@k-state.edu or (555) 123-4567" },
+  { title: "Varieties", url: "varieties.html", content: "Different sorghum varieties suitable for Central Kansas…" },
+  { title: "Planting", url: "planting.html", content: "Guidelines for planting sorghum crops effectively…" },
+  { title: "Diseases", url: "diseases.html", content: "Common diseases affecting sorghum and management tips…" },
+  { title: "Harvesting", url: "harvesting.html", content: "Best practices for harvesting sorghum…" }
+];
+
+const fuse = new Fuse(pages, {
+  keys: ['title', 'content'],
+  threshold: 0.4
+});
+
+document.getElementById('searchBox').addEventListener('input', e => {
+  const results = fuse.search(e.target.value);
+  const resultsList = document.getElementById('searchResults');
+  resultsList.innerHTML = '';
+  results.forEach(result => {
+    const li = document.createElement('li');
+    li.innerHTML = `<a href="${result.item.url}">${result.item.title}</a>`;
+    resultsList.appendChild(li);
+  });
+});
+</script>    
+       
+      
 </body>
 </html>
