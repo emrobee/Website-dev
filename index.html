@@ -37,6 +37,7 @@ h1, h2, h3, h4 {
 }
 </style>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>   
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #512888;">
   <div class="container">
@@ -53,10 +54,15 @@ h1, h2, h3, h4 {
       </ul>
     </div>
   </div>
-  <input type="text" id="searchBox" placeholder="Search…" class="form-control my-3">
-<ul id="results"></ul>
-  
+  <form class="d-flex ms-3">
+  <input id="searchBox" class="form-control me-2" type="search" placeholder="Search this site…" aria-label="Search">
+  </form>
 </nav>
+
+<div class="container my-3">
+  <ul id="searchResults"></ul>
+</div>
+    
 
 <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
@@ -110,24 +116,24 @@ h1, h2, h3, h4 {
 
 <script>
 const pages = [
-  { title: "Home", url: "index.html", content: "Welcome to the Sorghum Page This website provides information…" },
-  { title: "About", url: "about.html", content: "About Sorghum This page provides background information…" },
-  { title: "Resources", url: "resources.html", content: "Downloadable guides and useful links…" },
-  { title: "Contact", url: "contact.html", content: "Email: info@k-state.edu Phone: (555) 123-4567" },
-  { title: "Varieties", url: "varieties.html", content: "Information about different sorghum varieties…" },
-  { title: "Planting", url: "planting.html", content: "Guidelines for planting sorghum…" },
-  { title: "Diseases", url: "diseases.html", content: "Common diseases affecting sorghum…" },
-  { title: "Harvesting", url: "harvesting.html", content: "Best practices for harvesting sorghum…" },
+  { title: "Home", url: "index.html", content: "Welcome to the Sorghum Page. Information and resources about sorghum in Central Kansas…" },
+  { title: "About", url: "about.html", content: "About Sorghum and its importance in Central Kansas agriculture…" },
+  { title: "Resources", url: "resources.html", content: "Guides, research papers, and links about sorghum production…" },
+  { title: "Contact", url: "contact.html", content: "Contact us at info@k-state.edu or (555) 123-4567" },
+  { title: "Varieties", url: "varieties.html", content: "Different sorghum varieties suitable for Central Kansas…" },
+  { title: "Planting", url: "planting.html", content: "Guidelines for planting sorghum crops effectively…" },
+  { title: "Diseases", url: "diseases.html", content: "Common diseases affecting sorghum and management tips…" },
+  { title: "Harvesting", url: "harvesting.html", content: "Best practices for harvesting sorghum…" }
 ];
 
 const fuse = new Fuse(pages, {
   keys: ['title', 'content'],
-  threshold: 0.3
+  threshold: 0.4
 });
 
 document.getElementById('searchBox').addEventListener('input', e => {
   const results = fuse.search(e.target.value);
-  const resultsList = document.getElementById('results');
+  const resultsList = document.getElementById('searchResults');
   resultsList.innerHTML = '';
   results.forEach(result => {
     const li = document.createElement('li');
