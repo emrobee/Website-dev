@@ -106,3 +106,33 @@ h1, h2, h3, h4 {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+
+<script>
+const pages = [
+  { title: "Home", url: "index.html", content: "Welcome to the Sorghum Page This website provides information…" },
+  { title: "About", url: "about.html", content: "About Sorghum This page provides background information…" },
+  { title: "Resources", url: "resources.html", content: "Downloadable guides and useful links…" },
+  { title: "Contact", url: "contact.html", content: "Email: info@k-state.edu Phone: (555) 123-4567" },
+  { title: "Varieties", url: "varieties.html", content: "Information about different sorghum varieties…" },
+  { title: "Planting", url: "planting.html", content: "Guidelines for planting sorghum…" },
+  { title: "Diseases", url: "diseases.html", content: "Common diseases affecting sorghum…" },
+  { title: "Harvesting", url: "harvesting.html", content: "Best practices for harvesting sorghum…" },
+];
+
+const fuse = new Fuse(pages, {
+  keys: ['title', 'content'],
+  threshold: 0.3
+});
+
+document.getElementById('searchBox').addEventListener('input', e => {
+  const results = fuse.search(e.target.value);
+  const resultsList = document.getElementById('results');
+  resultsList.innerHTML = '';
+  results.forEach(result => {
+    const li = document.createElement('li');
+    li.innerHTML = `<a href="${result.item.url}">${result.item.title}</a>`;
+    resultsList.appendChild(li);
+  });
+});
+</script>
