@@ -44,19 +44,6 @@ h1, h2, h3, h4 {
     color: #512888;
 }
 </style>
-
-.dataTables_wrapper .dataTables_filter input {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 4px;
-}
-
-table.dataTable thead select {
-    width: 100%;
-    padding: 2px;
-    font-size: 0.875rem;
-}
-    
 </head>
     
 <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script> 
@@ -127,6 +114,7 @@ table.dataTable thead select {
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
+<script>
 $(document).ready(function() {
     $.ajax({
         url: 'https://corsproxy.io/?https://docs.google.com/spreadsheets/d/e/2PACX-1vTUQTjArcnYl6cCmCoimL5AI1HrNez2tMvJEGBoAPNYJPFMTdxQwbEWit5iscTMeoHKI3Y9SZjb8uMX/pub?gid=0&single=true&output=csv',
@@ -135,34 +123,18 @@ $(document).ready(function() {
         const rows = data.trim().split('\n').map(r => r.split(','));
         const headers = rows.shift();
 
-        const table = $('#csvTable').DataTable({
+        $('#csvTable').DataTable({
             data: rows,
             columns: headers.map(h => ({ title: h })),
             responsive: true,
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
-            initComplete: function () {
-                this.api().columns().every(function () {
-                    const column = this;
-                    const select = $('<select><option value="">All</option></select>')
-                        .appendTo($(column.header()).empty())
-                        .on('change', function () {
-                            const val = $.fn.dataTable.util.escapeRegex($(this).val());
-                            column.search(val ? '^' + val + '$' : '', true, false).draw();
-                        });
-
-                    column.data().unique().sort().each(function (d) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
-                    });
-                });
-            }
+            ]
         });
     });
 });
 </script>
-
 
 
 
