@@ -3,16 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Felderhoff Lab Intertek Makers</title>
+<title>Felderhoff Lab Intertek Markers</title>
 
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">    
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
 <style>
 .list-group-item.active {
     background-color: #512888;
@@ -23,8 +22,6 @@
     background-color: #512888;
     border-color: #512888;
 }
-
-/* Extended theme */
 .btn-primary {
     background-color: #512888;
     border-color: #512888;
@@ -42,29 +39,26 @@ a:hover {
 }
 h1, h2, h3, h4 {
     color: #512888;
-
-.dataTables_wrapper .dataTables_filter input {
+}
+div.dataTables_wrapper div.dataTables_filter input {
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 4px;
 }
-
 table.dataTable thead select {
+    display: block;
     width: 100%;
     padding: 2px;
     font-size: 0.875rem;
-}    
+    background-color: #fff;
+    color: #000;
 }
 </style>
-
-
-    
 </head>
-    
-<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script> 
-    
+
 <body>
-    
+
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #512888;">
   <div class="container">
     <a class="navbar-brand" href="index.html">Felderhoff Sorghum Lab</a>
@@ -75,51 +69,49 @@ table.dataTable thead select {
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="resources.html">Research</a></li>
+        <li class="nav-item"><a class="nav-link active" href="resources.html">Research</a></li>
         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
       </ul>
     </div>
   </div>
-    
   <form class="d-flex ms-3">
    <input id="searchBox" class="form-control me-2" type="search" placeholder="Search this site…" aria-label="Search">
-  </form>  
-    
+  </form>
 </nav>
 
 <div class="container my-3">
   <ul id="searchResults"></ul>
-</div>    
+</div>
 
 <div class="container-fluid p-0">
   <img src="Soghum-Field.jpg" alt="Sorghum Field" class="img-fluid w-100">
 </div>
-<div class="col-md-9">
+
+<div class="container my-4">
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3 mb-3">
       <div class="list-group">
         <a href="#" class="list-group-item list-group-item-action active">Project Topics</a>
-        <a href="varieties.html" class="list-group-item list-group-item-action">Link 1</a>
-        <a href="planting.html" class="list-group-item list-group-item-action">Link 2</a>
-        <a href="diseases.html" class="list-group-item list-group-item-action">Link 3</a>
-        <a href="harvesting.html" class="list-group-item list-group-item-action">Lab Interek Markers</a>
+        <a href="varieties.html" class="list-group-item list-group-item-action">Varieties</a>
+        <a href="planting.html" class="list-group-item list-group-item-action">Planting</a>
+        <a href="diseases.html" class="list-group-item list-group-item-action">Diseases</a>
+        <a href="harvesting.html" class="list-group-item list-group-item-action">Lab Intertek Markers</a>
       </div>
     </div>
-<div class="col-md-9">
-  <h1>Lab Intertek Markers</h1>
-  <p>Best practices for harvesting sorghum to ensure quality and yield.</p>
-     <div class="table-responsive">
+    <div class="col-md-9">
+      <h1>Lab Intertek Markers</h1>
+      <p>Best practices for harvesting sorghum to ensure quality and yield.</p>
+
+      <div class="table-responsive">
         <table id="csvTable" class="table table-striped table-bordered w-100"></table>
       </div>
     </div>
   </div>
 </div>
 
-
 <footer style="background-color: #512888;" class="text-white text-center py-3">
-  &copy; 2025 Felderhoff Sorghum Lab. Powered by EmroTech. All Rights Reserved. 
+  &copy; 2025 Felderhoff Sorghum Lab. Powered by EmroTech. All Rights Reserved.
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -142,36 +134,44 @@ $(document).ready(function() {
             data: rows,
             columns: headers.map(h => ({ title: h })),
             responsive: true,
+            scrollX: true,
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
+            ],
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    const column = this;
+                    const select = $('<select><option value="">All</option></select>')
+                        .appendTo($(column.header()).empty())
+                        .on('change', function () {
+                            const val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                    column.data().unique().sort().each(function (d) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                });
+            }
         });
     });
 });
 </script>
 
-
-
-
-
-    
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
 <script>
 const pages = [
-  { title: "Home", url: "index.html", content: "Welcome to the Sorghum Page. Information and resources about sorghum in Central Kansas…" },
-  { title: "About", url: "about.html", content: "About Sorghum and its importance in Central Kansas agriculture…" },
-  { title: "Resources", url: "resources.html", content: "Guides, research papers, and links about sorghum production…" },
-  { title: "Contact", url: "contact.html", content: "Contact us at info@k-state.edu or (555) 123-4567" },
-  { title: "Varieties", url: "varieties.html", content: "Different sorghum varieties suitable for Central Kansas…" },
-  { title: "Planting", url: "planting.html", content: "Guidelines for planting sorghum crops effectively…" },
-  { title: "Diseases", url: "diseases.html", content: "Common diseases affecting sorghum and management tips…" },
-  { title: "Harvesting", url: "harvesting.html", content: "Best practices for harvesting sorghum…" }
+  { title: "Home", url: "index.html", content: "Welcome to the Sorghum Page." },
+  { title: "About", url: "about.html", content: "About Sorghum and its importance…" },
+  { title: "Resources", url: "resources.html", content: "Guides, research papers…" },
+  { title: "Contact", url: "contact.html", content: "Contact us…" },
+  { title: "Varieties", url: "varieties.html", content: "Different sorghum varieties…" },
+  { title: "Planting", url: "planting.html", content: "Guidelines for planting…" },
+  { title: "Diseases", url: "diseases.html", content: "Common diseases…" },
+  { title: "Harvesting", url: "harvesting.html", content: "Best practices for harvesting…" }
 ];
 
-const fuse = new Fuse(pages, {
-  keys: ['title', 'content'],
-  threshold: 0.4
-});
+const fuse = new Fuse(pages, { keys: ['title', 'content'], threshold: 0.4 });
 
 document.getElementById('searchBox').addEventListener('input', e => {
   const results = fuse.search(e.target.value);
@@ -183,10 +183,7 @@ document.getElementById('searchBox').addEventListener('input', e => {
     resultsList.appendChild(li);
   });
 });
-</script>    
+</script>
 
-    
- 
-      
 </body>
 </html>
