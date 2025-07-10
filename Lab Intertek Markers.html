@@ -46,10 +46,10 @@ div.dataTables_wrapper div.dataTables_filter input {
 table.dataTable thead select {
     display: block;
     width: 100%;
-    padding: 2px;
     font-size: 0.875rem;
     background-color: #fff;
     color: #000;
+    margin-top: 4px;
 }
 table.dataTable td, table.dataTable th {
     white-space: normal;
@@ -96,7 +96,7 @@ table.dataTable td, table.dataTable th {
       <div class="list-group mb-4">
         <a href="#" class="list-group-item list-group-item-action active">Check Out Our</a>
         <a href="varieties.html" class="list-group-item list-group-item-action">Link 1</a>
-        <a href="planting.html" class="list-group-item list-group-item-action">Link 2 </a>
+        <a href="planting.html" class="list-group-item list-group-item-action">Link 2</a>
         <a href="Team Members.html" class="list-group-item list-group-item-action">Team Members</a>
         <a href="Lab Intertek Markers" class="list-group-item list-group-item-action">Lab Intertek Markers</a>
       </div>
@@ -104,14 +104,13 @@ table.dataTable td, table.dataTable th {
       <div class="d-flex flex-column gap-4">
         <img src="sorghum_73_400x400.jpg" alt="Sorghum Image 1" class="img-fluid rounded shadow-sm">
         <img src="sorghum_66_400x400.jpg" alt="Sorghum Image 2" class="img-fluid rounded shadow-sm">
-        <img src="sorghum_hands_400x400.jpg" alt="Sorghum Image 2" class="img-fluid rounded shadow-sm"> 
+        <img src="sorghum_hands_400x400.jpg" alt="Sorghum Image 3" class="img-fluid rounded shadow-sm">
       </div>
     </div>
 
     <!-- Main Content -->
     <div class="col-md-9">
       <h1>Lab Intertek Markers</h1>
-      <!--<p>Best practices for harvesting sorghum to ensure quality and yield.</p>-->
 
       <div class="table-responsive">
         <table id="csvTable" class="table table-striped table-bordered w-100"></table>
@@ -150,26 +149,29 @@ $(document).ready(function() {
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
             initComplete: function () {
-              this.api().columns().every(function () {
-               const column = this;
+                this.api().columns().every(function () {
+                    const column = this;
+                    const header = $(column.header());
+                    const headerText = header.text().trim();
 
-              const header = $(column.header());
-              const headerText = header.text();
+                    header.html(`
+                        <div style="font-weight:bold; margin-bottom:4px;">${headerText}</div>
+                        <div></div>
+                    `);
 
-               const select = $('<select><option value="">All</option></select>')
-               .on('change', function () {
-                const val = $.fn.dataTable.util.escapeRegex($(this).val());
-                column.search(val ? '^' + val + '$' : '', true, false).draw();
-            });
+                    const filterDiv = header.find('div').eq(1);
+                    const select = $('<select class="form-select form-select-sm"><option value="">All</option></select>')
+                        .on('change', function () {
+                            const val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
 
-         column.data().unique().sort().each(function (d) {
-                select.append('<option value="' + d + '">' + d + '</option>');
-        });
+                    column.data().unique().sort().each(function (d) {
+                        select.append(`<option value="${d}">${d}</option>`);
+                    });
 
-        header.html(`${headerText}<br>`).append(select);
-    });
-}
-
+                    filterDiv.append(select);
+                });
             }
         });
     });
@@ -185,8 +187,8 @@ const pages = [
   { title: "Contact", url: "contact.html", content: "Contact us…" },
   { title: "Varieties", url: "varieties.html", content: "Different sorghum varieties…" },
   { title: "Planting", url: "planting.html", content: "Guidelines for planting…" },
-  { title: "Team Members", url: "Team Members.html", content: "Common diseases…" },
-  { title: "Lab Intertek Markers", url: "Lab Intertek Markers.html", content: "Best practices for harvesting…" }
+  { title: "Team Members", url: "Team Members.html", content: "Team members…" },
+  { title: "Lab Intertek Markers", url: "Lab Intertek Markers.html", content: "Lab data and markers…" }
 ];
 
 const fuse = new Fuse(pages, { keys: ['title', 'content'], threshold: 0.4 });
