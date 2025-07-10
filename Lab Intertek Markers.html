@@ -51,6 +51,10 @@ table.dataTable thead select {
     background-color: #fff;
     color: #000;
 }
+table.dataTable td, table.dataTable th {
+    white-space: normal;
+    word-wrap: break-word;
+}
 </style>
 </head>
 
@@ -92,23 +96,22 @@ table.dataTable thead select {
       <div class="list-group mb-4">
         <a href="#" class="list-group-item list-group-item-action active">Check Out Our</a>
         <a href="varieties.html" class="list-group-item list-group-item-action">Link 1</a>
-        <a href="planting.html" class="list-group-item list-group-item-action">Link 2</a>
+        <a href="planting.html" class="list-group-item list-group-item-action">Link 2 </a>
         <a href="Team Members.html" class="list-group-item list-group-item-action">Team Members</a>
         <a href="Lab Intertek Markers" class="list-group-item list-group-item-action">Lab Intertek Markers</a>
       </div>
 
-      <!-- Images -->
       <div class="d-flex flex-column gap-4">
         <img src="sorghum_73_400x400.jpg" alt="Sorghum Image 1" class="img-fluid rounded shadow-sm">
         <img src="sorghum_66_400x400.jpg" alt="Sorghum Image 2" class="img-fluid rounded shadow-sm">
-         <img src="sorghum_66_400x400.jpg" alt="Sorghum Image 2" class="img-fluid rounded shadow-sm"> 
+        <img src="sorghum_hands_400x400.jpg" alt="Sorghum Image 2" class="img-fluid rounded shadow-sm"> 
       </div>
     </div>
 
     <!-- Main Content -->
     <div class="col-md-9">
       <h1>Lab Intertek Markers</h1>
-     <!-- <p>Best practices for harvesting sorghum to ensure quality and yield.</p>-->
+      <!--<p>Best practices for harvesting sorghum to ensure quality and yield.</p>-->
 
       <div class="table-responsive">
         <table id="csvTable" class="table table-striped table-bordered w-100"></table>
@@ -142,7 +145,6 @@ $(document).ready(function() {
             data: rows,
             columns: headers.map(h => ({ title: h })),
             responsive: true,
-            scrollX: true,
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
