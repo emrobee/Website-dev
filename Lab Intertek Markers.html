@@ -150,18 +150,26 @@ $(document).ready(function() {
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
             initComplete: function () {
-                this.api().columns().every(function () {
-                    const column = this;
-                    const select = $('<select><option value="">All</option></select>')
-                        .appendTo($(column.header()).empty())
-                        .on('change', function () {
-                            const val = $.fn.dataTable.util.escapeRegex($(this).val());
-                            column.search(val ? '^' + val + '$' : '', true, false).draw();
-                        });
-                    column.data().unique().sort().each(function (d) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
-                    });
-                });
+              this.api().columns().every(function () {
+               const column = this;
+
+              const header = $(column.header());
+              const headerText = header.text();
+
+               const select = $('<select><option value="">All</option></select>')
+               .on('change', function () {
+                const val = $.fn.dataTable.util.escapeRegex($(this).val());
+                column.search(val ? '^' + val + '$' : '', true, false).draw();
+            });
+
+         column.data().unique().sort().each(function (d) {
+                select.append('<option value="' + d + '">' + d + '</option>');
+        });
+
+        header.html(`${headerText}<br>`).append(select);
+    });
+}
+
             }
         });
     });
