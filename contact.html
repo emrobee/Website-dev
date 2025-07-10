@@ -83,7 +83,7 @@ h1, h2, h3, h4 {
       <p>Email: <a href="mailto:info@k-state.edu">info@k-state.edu</a><br>Phone: (555) 123-4567</p>
 
       <h2>Enquiry Form</h2>
-      <form action="mailto:okonodamichael@gmail.com" method="post" enctype="text/plain">
+      <form id="enquiryForm">
         <div class="mb-3">
           <label for="fullName" class="form-label">Full Name</label>
           <input type="text" name="Full Name" class="form-control" id="fullName" required>
@@ -102,6 +102,10 @@ h1, h2, h3, h4 {
         </div>
         <button type="submit" class="btn btn-primary">Submit Enquiry</button>
       </form>
+
+      <div id="successMessage" class="alert alert-success mt-3 d-none">
+        Mail successfully sent. The page will refresh shortly…
+      </div>
     </div>
   </div>
 </div>
@@ -114,6 +118,31 @@ h1, h2, h3, h4 {
 <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
 
 <script>
+document.getElementById('enquiryForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch('https://formspree.io/f/yourformid', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(response => {
+        if (response.ok) {
+            document.getElementById('successMessage').classList.remove('d-none');
+            setTimeout(() => {
+                location.reload();
+            }, 3000);
+        } else {
+            alert('There was a problem sending your enquiry. Please try again.');
+        }
+    }).catch(() => {
+        alert('There was a problem sending your enquiry. Please try again.');
+    });
+});
+
 const pages = [
   { title: "Home", url: "index.html", content: "Welcome to the Sorghum Page…" },
   { title: "About", url: "about.html", content: "About Sorghum and its importance…" },
