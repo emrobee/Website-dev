@@ -15,8 +15,6 @@
     background-color: #512888;
     border-color: #512888;
 }
-
-/* Extended theme */
 .btn-primary {
     background-color: #512888;
     border-color: #512888;
@@ -38,9 +36,8 @@ h1, h2, h3, h4 {
 </style>
 </head>
 
-<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>  
-    
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #512888;">
   <div class="container">
     <a class="navbar-brand" href="index.html">Felderhoff Sorghum Lab</a>
@@ -56,21 +53,20 @@ h1, h2, h3, h4 {
       </ul>
     </div>
   </div>
-   <form class="d-flex ms-3">
+  <form class="d-flex ms-3">
     <input id="searchBox" class="form-control me-2" type="search" placeholder="Search this site…" aria-label="Search">
-   </form>  
+  </form>
 </nav>
 
-    <div class="container my-3">
-      <ul id="searchResults"></ul>
-    </div>
-
-    
+<div class="container my-3">
+  <ul id="searchResults"></ul>
+</div>
 
 <div class="container-fluid p-0">
   <img src="Soghum-Field.jpg" alt="Sorghum Field" class="img-fluid w-100">
 </div>
-<div class="col-md-9">
+
+<div class="container my-4">
   <div class="row">
     <div class="col-md-3">
       <div class="list-group">
@@ -78,28 +74,55 @@ h1, h2, h3, h4 {
         <a href="varieties.html" class="list-group-item list-group-item-action">Link 1</a>
         <a href="planting.html" class="list-group-item list-group-item-action">Link 2</a>
         <a href="Team Members.html" class="list-group-item list-group-item-action">Team Members</a>
-        <a href="Lab Intertek Markers.html" class="list-group-item list-group-item-action">Lab Interek Markers</a>
+        <a href="Lab Intertek Markers.html" class="list-group-item list-group-item-action">Lab Intertek Markers</a>
       </div>
     </div>
-<div class="col-md-9">
-  <h1>Contact Us</h1>
-  <p>Email: <a href="mailto:info@k-state.edu">XXXX</a><br>Phone: XXXX</p>
+
+    <div class="col-md-9">
+      <h1>Contact Us</h1>
+      <p>Email: <a href="mailto:info@k-state.edu">info@k-state.edu</a><br>Phone: (555) 123-4567</p>
+
+      <h2>Enquiry Form</h2>
+      <form action="mailto:okonodamichael@gmail.com" method="post" enctype="text/plain">
+        <div class="mb-3">
+          <label for="fullName" class="form-label">Full Name</label>
+          <input type="text" name="Full Name" class="form-control" id="fullName" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" name="Email" class="form-control" id="email" required>
+        </div>
+        <div class="mb-3">
+          <label for="subject" class="form-label">Subject</label>
+          <input type="text" name="Subject" class="form-control" id="subject" required>
+        </div>
+        <div class="mb-3">
+          <label for="message" class="form-label">Message (max 1000 characters)</label>
+          <textarea name="Message" class="form-control" id="message" rows="6" maxlength="1000" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Enquiry</button>
+      </form>
+    </div>
+  </div>
 </div>
+
 <footer style="background-color: #512888;" class="text-white text-center py-3">
   &copy; 2025 Felderhoff Sorghum Lab. Powered by EmroTech. All Rights Reserved.
 </footer>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
 
 <script>
 const pages = [
-  { title: "Home", url: "index.html", content: "Welcome to the Sorghum Page. Information and resources about sorghum in Central Kansas…" },
-  { title: "About", url: "about.html", content: "About Sorghum and its importance in Central Kansas agriculture…" },
-  { title: "Resources", url: "resources.html", content: "Guides, research papers, and links about sorghum production…" },
-  { title: "Contact", url: "contact.html", content: "Contact us at info@k-state.edu or (555) 123-4567" },
-  { title: "Varieties", url: "varieties.html", content: "Different sorghum varieties suitable for Central Kansas…" },
-  { title: "Planting", url: "planting.html", content: "Guidelines for planting sorghum crops effectively…" },
-  { title: "Team Members", url: "Team Members.html", content: "Common diseases affecting sorghum and management tips…" },
-  { title: "Lab Intertek Markers", url: "Lab Intertek Markers.html", content: "Best practices for harvesting sorghum…" }
+  { title: "Home", url: "index.html", content: "Welcome to the Sorghum Page…" },
+  { title: "About", url: "about.html", content: "About Sorghum and its importance…" },
+  { title: "Resources", url: "resources.html", content: "Guides, research papers…" },
+  { title: "Contact", url: "contact.html", content: "Contact us…" },
+  { title: "Varieties", url: "varieties.html", content: "Different sorghum varieties…" },
+  { title: "Planting", url: "planting.html", content: "Guidelines for planting…" },
+  { title: "Team Members", url: "Team Members.html", content: "Team members…" },
+  { title: "Lab Intertek Markers", url: "Lab Intertek Markers.html", content: "Lab data and markers…" }
 ];
 
 const fuse = new Fuse(pages, {
@@ -117,9 +140,7 @@ document.getElementById('searchBox').addEventListener('input', e => {
     resultsList.appendChild(li);
   });
 });
-</script>    
- 
+</script>
 
-      
 </body>
 </html>
