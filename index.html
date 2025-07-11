@@ -15,8 +15,6 @@
     background-color: #512888;
     border-color: #512888;
 }
-
-/* Extended theme */
 .btn-primary {
     background-color: #512888;
     border-color: #512888;
@@ -37,11 +35,13 @@ h1, h2, h3, h4 {
 }
 </style>
 </head>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>   
+
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #512888;">
   <div class="container">
-    <a class="navbar-brand" href="index.html">Felderhoff Sorghum Lab</a>
+    <a class="navbar-brand" href="index.html">
+      <img src="Logo.PNG" alt="Felderhoff Lab Logo" height="50" class="d-inline-block align-text-top">
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -55,7 +55,7 @@ h1, h2, h3, h4 {
     </div>
   </div>
   <form class="d-flex ms-3">
-  <input id="searchBox" class="form-control me-2" type="search" placeholder="Search this site…" aria-label="Search">
+    <input id="searchBox" class="form-control me-2" type="search" placeholder="Search this site…" aria-label="Search">
   </form>
 </nav>
 
@@ -106,11 +106,15 @@ h1, h2, h3, h4 {
     </div>
   </div>
 </div>
+
 <footer style="background-color: #512888;" class="text-white text-center py-3">
   &copy; 2025 Feldorhoff Sorghum Lab. Powered by Emro. All Rights Reserved.
 </footer>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+
 <script>
 const pages = [
   { title: "Home", url: "index.html", content: "Welcome to the Sorghum Page. Information and resources about sorghum in Central Kansas…" },
@@ -138,10 +142,7 @@ document.getElementById('searchBox').addEventListener('input', e => {
     resultsList.appendChild(li);
   });
 });
-</script>    
-    
-</body>  
+</script>
+
+</body>
 </html>
-
-
-
