@@ -51,7 +51,7 @@ h1, h2, h3, h4 {
         <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
         <li class="nav-item"><a class="nav-link" href="resources.html">Research</a></li>
-        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
       </ul>
     </div>
   </div>
@@ -65,33 +65,35 @@ h1, h2, h3, h4 {
 </div>
 
 <div class="container-fluid p-0">
-  <img src="Soghum-Field.jpg" alt="Sorghum Field" class="img-fluid w-100">
+  <!--<img src="Soghum-Field.jpg" alt="Sorghum Field" class="img-fluid w-100">-->
 </div>
 
 <div class="container my-4">
-  <div class="row">
-    <div class="col-md-3">
+  <div class="row gx-4">
+    <!-- Sidebar -->
+    <aside class="col-12 col-md-3 mb-4">
       <div class="list-group">
         <a href="#" class="list-group-item list-group-item-action active">Check Out Our</a>
-        <a href="varieties.html" class="list-group-item list-group-item-action">Link 1</a>
-        <a href="planting.html" class="list-group-item list-group-item-action">Link 2</a>
+        <a href="varieties.html" class="list-group-item list-group-item-action">Varieties</a>
+        <a href="planting.html" class="list-group-item list-group-item-action">Planting</a>
         <a href="Team Members.html" class="list-group-item list-group-item-action">Team Members</a>
         <a href="Lab Intertek Markers.html" class="list-group-item list-group-item-action">Lab Intertek Markers</a>
       </div>
-    </div>
+    </aside>
 
-    <div class="col-md-9">
+    <!-- Main Content -->
+    <main class="col-12 col-md-9">
       <h1>Meet Our Team Members</h1>
       <p>We are proud to introduce the dedicated members of our research team.</p>
 
-      <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
         <!-- Team Member 1 -->
         <div class="col">
           <div class="card h-100">
-            <img src="Terry.PNG" class="card-img-top" alt="Member 1">
+            <img src="team1.jpg" class="card-img-top" alt="Dr. Jane Doe">
             <div class="card-body">
-              <h5 class="card-title">Dr. Terry Felderhoff</h5>
-              <p class="card-text">Position held.</p>
+              <h5 class="card-title">Dr. Jane Doe</h5>
+              <p class="card-text">Lead Researcher in sorghum disease resistance.</p>
               <a href="#" class="btn btn-sm btn-primary">View Publications</a>
             </div>
           </div>
@@ -100,10 +102,10 @@ h1, h2, h3, h4 {
         <!-- Team Member 2 -->
         <div class="col">
           <div class="card h-100">
-            <img src="Samdip.PNG" class="card-img-top" alt="Member 2">
+            <img src="team2.jpg" class="card-img-top" alt="John Smith">
             <div class="card-body">
-              <h5 class="card-title">Dr. Sandeep Marla</h5>
-              <p class="card-text">Postdoctoral.</p>
+              <h5 class="card-title">John Smith</h5>
+              <p class="card-text">Genetics specialist focusing on crop yield.</p>
               <a href="#" class="btn btn-sm btn-primary">View Research</a>
             </div>
           </div>
@@ -112,28 +114,18 @@ h1, h2, h3, h4 {
         <!-- Team Member 3 -->
         <div class="col">
           <div class="card h-100">
-            <img src="NoQueb.PNG" class="card-img-top" alt="Member 3">
+            <img src="team3.jpg" class="card-img-top" alt="Emily Johnson">
             <div class="card-body">
-              <h5 class="card-title">Dr. Neqeebbullah Kakar</h5>
-              <p class="card-text">Postdoctoral.</p>
+              <h5 class="card-title">Emily Johnson</h5>
+              <p class="card-text">Field coordinator & agronomist.</p>
               <a href="#" class="btn btn-sm btn-primary">Field Reports</a>
             </div>
           </div>
         </div>
-         <!-- Team Member 4 -->
-        <div class="col">
-          <div class="card h-100">
-            <img src="Kinde.PNG" class="card-img-top" alt="Member 4">
-            <div class="card-body">
-              <h5 class="card-title">Dr. Kinde N. Ketema</h5>
-              <p class="card-text">Postdoctoral.</p>
-              <a href="#" class="btn btn-sm btn-primary">View Publications</a>
-            </div>
-          </div>
-        </div>
-        <!-- More members as needed -->
+
+        <!-- Add more rows/columns as needed -->
       </div>
-    </div>
+    </main>
   </div>
 </div>
 
