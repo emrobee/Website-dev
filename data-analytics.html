@@ -106,6 +106,9 @@
     // URL for the CSV data from Google Sheets
     const csvUrl = 'https://corsproxy.io/?https://docs.google.com/spreadsheets/d/e/2PACX-1vTUQTjArcnYl6cCmCoimL5AI1HrNez2tMvJEGBoAPNYJPFMTdxQwbEWit5iscTMeoHKI3Y9SZjb8uMX/pub?gid=0&single=true&output=csv';
 
+    // Define the maximum number of entries for the progress bar
+    const MAX_PROGRESS_ENTRIES = 500;
+
     // Fetch data from the CSV URL
     fetch(csvUrl)
       .then(res => res.text()) // Convert response to text
@@ -127,7 +130,6 @@
         const alleleCounts = {};
         const interFeldPairs = {}; // Stores Intermarker_ID to FelderhoffSNP_ID mappings
 
-        const totalSNPs = rows.length; // Total number of data entries (rows)
         let felderhoffSNPCounter = 0; // Counter for FelderhoffSNP_ID presence
 
         // Process each row to populate count objects
@@ -157,9 +159,11 @@
 
         // Update Progress Bar
         const processedSNPsCount = felderhoffSNPCounter; // Use this for progress bar
-        const percent = totalSNPs > 0 ? Math.round((processedSNPsCount / totalSNPs) * 100) : 0;
+        // Calculate percentage based on MAX_PROGRESS_ENTRIES (500)
+        const percent = Math.round((processedSNPsCount / MAX_PROGRESS_ENTRIES) * 100);
         const progressBar = document.getElementById("snpProgress");
-        progressBar.style.width = `${percent}%`;
+        // Ensure the width doesn't exceed 100%
+        progressBar.style.width = `${Math.min(percent, 100)}%`;
         // Display the number of processed entries
         progressBar.textContent = `${processedSNPsCount} entries`;
 
