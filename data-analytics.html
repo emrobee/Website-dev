@@ -11,6 +11,8 @@
     h1, h2, h3, h4 { color: #512888; }
     .card { box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 12px; }
     .card-header { background-color: #512888; color: white; }
+    .progress { height: 25px; }
+    .progress-bar { background-color: #512888; }
   </style>
 </head>
 <body>
@@ -37,10 +39,34 @@
 
   <div class="container my-5">
     <h1 class="mb-4">Data Analytics</h1>
+
+    <div class="mb-4">
+      <h5>Total FelderhoffSNP_ID Progress</h5>
+      <div class="progress">
+        <div id="snpProgress" class="progress-bar" role="progressbar" style="width: 0%">0%</div>
+      </div>
+    </div>
+
     <div class="row g-4">
       <div class="col-md-6">
         <div class="card">
-          <div class="card-header">Count of SNPs per Allele</div>
+          <div class="card-header">Distribution of FAM_SNP</div>
+          <div class="card-body">
+            <canvas id="famChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">Distribution of HEX_SNP</div>
+          <div class="card-body">
+            <canvas id="hexChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">Allele/Locus Count</div>
           <div class="card-body">
             <canvas id="alleleChart"></canvas>
           </div>
@@ -48,17 +74,9 @@
       </div>
       <div class="col-md-6">
         <div class="card">
-          <div class="card-header">Comment Keyword Frequency</div>
+          <div class="card-header">Intermarker_ID vs FelderhoffSNP_ID</div>
           <div class="card-body">
-            <canvas id="commentChart"></canvas>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-header">SNP Type Distribution (FAM vs HEX)</div>
-          <div class="card-body">
-            <canvas id="snpVariantChart"></canvas>
+            <canvas id="doubleBarChart"></canvas>
           </div>
         </div>
       </div>
@@ -79,66 +97,92 @@
         const headers = rows.shift();
 
         const alleleIndex = headers.findIndex(h => h.toLowerCase().includes('allele'));
-        const commentIndex = headers.findIndex(h => h.toLowerCase().includes('comment'));
         const famIndex = headers.findIndex(h => h.toLowerCase().includes('fam'));
         const hexIndex = headers.findIndex(h => h.toLowerCase().includes('hex'));
+        const feldIndex = headers.findIndex(h => h.toLowerCase().includes('felderhoffsnp'));
+        const interIndex = headers.findIndex(h => h.toLowerCase().includes('intermarker'));
 
+        const famCounts = {};
+        const hexCounts = {};
         const alleleCounts = {};
-        const commentKeywords = ["flanking", "reverse", "ref", "missing"];
-        const commentCounts = { flanking: 0, reverse: 0, ref: 0, missing: 0 };
-        let famCount = 0, hexCount = 0;
+        const interFeldPairs = {};
+
+        const totalSNPs = rows.length;
 
         rows.forEach(row => {
-          const allele = row[alleleIndex];
+          const fam = row[famIndex] || "Missing";
+          const hex = row[hexIndex] === '-' ? "Missing" : (row[hexIndex] || "Missing");
+          const allele = row[alleleIndex] || "Unknown";
+          const feld = row[feldIndex] || "";
+          const inter = row[interIndex] || "";
+
+          famCounts[fam] = (famCounts[fam] || 0) + 1;
+          hexCounts[hex] = (hexCounts[hex] || 0) + 1;
           alleleCounts[allele] = (alleleCounts[allele] || 0) + 1;
 
-          const comment = row[commentIndex]?.toLowerCase() || "";
-          commentKeywords.forEach(keyword => {
-            if (comment.includes(keyword)) commentCounts[keyword]++;
-          });
-
-          if (row[famIndex]) famCount++;
-          if (row[hexIndex]) hexCount++;
+          if (inter && feld) {
+            interFeldPairs[inter] = feld;
+          }
         });
 
-        // Allele Chart
-        new Chart(document.getElementById('alleleChart'), {
+        // Progress bar
+        const percent = Math.round((Object.keys(interFeldPairs).length / totalSNPs) * 100);
+        const progressBar = document.getElementById("snpProgress");
+        progressBar.style.width = `${percent}%`;
+        progressBar.textContent = `${percent}%`;
+
+        const createBarChart = (ctx, labels, counts, label) => {
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels,
+              datasets: [{
+                label,
+                data: counts,
+                backgroundColor: '#512888'
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: { legend: { display: false } },
+              scales: { x: { ticks: { autoSkip: false, maxRotation: 90, minRotation: 45 } } }
+            }
+          });
+        };
+
+        createBarChart(document.getElementById('famChart'), Object.keys(famCounts), Object.values(famCounts), 'FAM SNP Distribution');
+        createBarChart(document.getElementById('hexChart'), Object.keys(hexCounts), Object.values(hexCounts), 'HEX SNP Distribution');
+        createBarChart(document.getElementById('alleleChart'), Object.keys(alleleCounts), Object.values(alleleCounts), 'Allele Count');
+
+        // Double-sided chart (Intermarker_ID vs FelderhoffSNP_ID)
+        new Chart(document.getElementById('doubleBarChart'), {
           type: 'bar',
           data: {
-            labels: Object.keys(alleleCounts),
-            datasets: [{
-              label: '# of SNPs',
-              data: Object.values(alleleCounts),
-              backgroundColor: '#512888'
-            }]
+            labels: Object.keys(interFeldPairs),
+            datasets: [
+              {
+                label: 'Intermarker_ID',
+                data: Object.keys(interFeldPairs).map(() => 1),
+                backgroundColor: '#512888'
+              },
+              {
+                label: 'FelderhoffSNP_ID',
+                data: Object.values(interFeldPairs).map(() => 1),
+                backgroundColor: '#a580e2'
+              }
+            ]
           },
           options: {
             responsive: true,
-            plugins: { legend: { display: false } }
-          }
-        });
-
-        // Comment Keyword Chart
-        new Chart(document.getElementById('commentChart'), {
-          type: 'pie',
-          data: {
-            labels: Object.keys(commentCounts),
-            datasets: [{
-              data: Object.values(commentCounts),
-              backgroundColor: ['#512888', '#7a4bc4', '#a580e2', '#c3a5ee']
-            }]
-          }
-        });
-
-        // SNP Type Chart
-        new Chart(document.getElementById('snpVariantChart'), {
-          type: 'doughnut',
-          data: {
-            labels: ['FAM SNPs', 'HEX SNPs'],
-            datasets: [{
-              data: [famCount, hexCount],
-              backgroundColor: ['#512888', '#a580e2']
-            }]
+            indexAxis: 'y',
+            scales: {
+              x: { stacked: true },
+              y: { stacked: true }
+            },
+            plugins: {
+              legend: { position: 'top' },
+              tooltip: { enabled: false }
+            }
           }
         });
       });
