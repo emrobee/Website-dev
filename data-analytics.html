@@ -52,7 +52,7 @@
       <h5>FelderhoffSNP_ID Progress Bar</h5>
       <div class="progress">
         <!-- Progress bar displays the count of processed entries and has a dynamic width -->
-        <div id="snpProgress" class="progress-bar" role="progressbar" style="width: 0%">0 </div>
+        <div id="snpProgress" class="progress-bar" role="progressbar" style="width: 0%">0 entries </div>
       </div>
     </div>
 
@@ -165,7 +165,7 @@
         // Ensure the width doesn't exceed 100%
         progressBar.style.width = `${Math.min(percent, 100)}%`;
         // Display the number of processed entries
-        progressBar.textContent = `${processedSNPsCount} entries`;
+        progressBar.textContent = `${processedSNPsCount} %`;
 
         /**
          * Creates a bar chart with customizable labels, data, and tooltip.
