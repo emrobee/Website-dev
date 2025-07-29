@@ -12,9 +12,7 @@
     .card { box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 12px; }
     .card-header { background-color: #512888; color: white; }
     .progress { height: 25px; }
-    .progress-bar { background-color: #800080; }
-    .maximize-btn { position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 2; }
-    .fullscreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: white; z-index: 9999; overflow: auto; padding: 20px; }
+    .progress-bar { background-color: #512888; }
   </style>
 </head>
 <body>
@@ -41,39 +39,45 @@
 
   <div class="container my-5">
     <h1 class="mb-4">Data Analytics</h1>
+
     <div class="mb-4">
-      <h5>Total FelderhoffSNP_ID Progress (<span id="totalCount"></span> entries)</h5>
+      <h5>Total FelderhoffSNP_ID Progress</h5>
       <div class="progress">
         <div id="snpProgress" class="progress-bar" role="progressbar" style="width: 0%">0%</div>
       </div>
     </div>
+
     <div class="row g-4">
       <div class="col-md-6">
-        <div class="card position-relative">
-          <div class="maximize-btn" onclick="toggleFullscreen(this)">⛶</div>
+        <div class="card">
           <div class="card-header">Distribution of FAM_SNP</div>
-          <div class="card-body"><canvas id="famChart"></canvas></div>
+          <div class="card-body">
+            <canvas id="famChart"></canvas>
+          </div>
         </div>
       </div>
       <div class="col-md-6">
-        <div class="card position-relative">
-          <div class="maximize-btn" onclick="toggleFullscreen(this)">⛶</div>
+        <div class="card">
           <div class="card-header">Distribution of HEX_SNP</div>
-          <div class="card-body"><canvas id="hexChart"></canvas></div>
+          <div class="card-body">
+            <canvas id="hexChart"></canvas>
+          </div>
         </div>
       </div>
       <div class="col-md-6">
-        <div class="card position-relative">
-          <div class="maximize-btn" onclick="toggleFullscreen(this)">⛶</div>
+        <div class="card">
           <div class="card-header">Allele/Locus Count</div>
-          <div class="card-body"><canvas id="alleleChart"></canvas></div>
+          <div class="card-body">
+            <canvas id="alleleChart"></canvas>
+          </div>
         </div>
       </div>
       <div class="col-md-6">
-        <div class="card position-relative">
-          <div class="maximize-btn" onclick="toggleFullscreen(this)">⛶</div>
+        <div class="card">
           <div class="card-header">Intermarker_ID vs FelderhoffSNP_ID</div>
-          <div class="card-body"><canvas id="doubleBarChart"></canvas></div>
+          <div class="card-body">
+            <canvas id="doubleBarChart"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -84,12 +88,6 @@
   </footer>
 
   <script>
-    function toggleFullscreen(btn) {
-      const card = btn.closest('.card');
-      card.classList.toggle('fullscreen');
-      btn.textContent = card.classList.contains('fullscreen') ? '🗗' : '⛶';
-    }
-
     const csvUrl = 'https://corsproxy.io/?https://docs.google.com/spreadsheets/d/e/2PACX-1vTUQTjArcnYl6cCmCoimL5AI1HrNez2tMvJEGBoAPNYJPFMTdxQwbEWit5iscTMeoHKI3Y9SZjb8uMX/pub?gid=0&single=true&output=csv';
 
     fetch(csvUrl)
@@ -104,7 +102,11 @@
         const feldIndex = headers.findIndex(h => h.toLowerCase().includes('felderhoffsnp'));
         const interIndex = headers.findIndex(h => h.toLowerCase().includes('intermarker'));
 
-        const famCounts = {}, hexCounts = {}, alleleCounts = {}, interFeldPairs = {};
+        const famCounts = {};
+        const hexCounts = {};
+        const alleleCounts = {};
+        const interFeldPairs = {};
+
         const totalSNPs = rows.length;
 
         rows.forEach(row => {
@@ -117,11 +119,13 @@
           famCounts[fam] = (famCounts[fam] || 0) + 1;
           hexCounts[hex] = (hexCounts[hex] || 0) + 1;
           alleleCounts[allele] = (alleleCounts[allele] || 0) + 1;
-          if (inter && feld) interFeldPairs[inter] = feld;
+
+          if (inter && feld) {
+            interFeldPairs[inter] = feld;
+          }
         });
 
-        document.getElementById('totalCount').textContent = totalSNPs;
-
+        // Progress bar
         const percent = Math.round((Object.keys(interFeldPairs).length / totalSNPs) * 100);
         const progressBar = document.getElementById("snpProgress");
         progressBar.style.width = `${percent}%`;
@@ -132,7 +136,11 @@
             type: 'bar',
             data: {
               labels,
-              datasets: [{ label, data: counts, backgroundColor: '#800080' }]
+              datasets: [{
+                label,
+                data: counts,
+                backgroundColor: '#512888'
+              }]
             },
             options: {
               responsive: true,
@@ -146,20 +154,35 @@
         createBarChart(document.getElementById('hexChart'), Object.keys(hexCounts), Object.values(hexCounts), 'HEX SNP Distribution');
         createBarChart(document.getElementById('alleleChart'), Object.keys(alleleCounts), Object.values(alleleCounts), 'Allele Count');
 
+        // Double-sided chart (Intermarker_ID vs FelderhoffSNP_ID)
         new Chart(document.getElementById('doubleBarChart'), {
           type: 'bar',
           data: {
             labels: Object.keys(interFeldPairs),
             datasets: [
-              { label: 'Intermarker_ID', data: Object.keys(interFeldPairs).map(() => 1), backgroundColor: '#800080' },
-              { label: 'FelderhoffSNP_ID', data: Object.values(interFeldPairs).map(() => 1), backgroundColor: '#d699ff' }
+              {
+                label: 'Intermarker_ID',
+                data: Object.keys(interFeldPairs).map(() => 1),
+                backgroundColor: '#512888'
+              },
+              {
+                label: 'FelderhoffSNP_ID',
+                data: Object.values(interFeldPairs).map(() => 1),
+                backgroundColor: '#a580e2'
+              }
             ]
           },
           options: {
             responsive: true,
             indexAxis: 'y',
-            scales: { x: { stacked: true }, y: { stacked: true } },
-            plugins: { legend: { position: 'top' }, tooltip: { enabled: false } }
+            scales: {
+              x: { stacked: true },
+              y: { stacked: true }
+            },
+            plugins: {
+              legend: { position: 'top' },
+              tooltip: { enabled: false }
+            }
           }
         });
       });
